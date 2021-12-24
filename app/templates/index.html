@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="A web app which takes text from users and classifies the toxicity levels of the text using a machine learning algorithm." />
+        <meta name="author" content="Judah Devasahayam" />
+        <title>Toxic Comment Classifier</title>
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+        <style>
+          .card{
+            padding: 1.5em .5em .5em;
+            border-radius: 1em;
+            box-shadow: 0 5px 10px rgba(0,0,0,.2);
+          }
+        </style>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.2/chart.min.js"></script>
+    </head>
+    <body>
+        <!-- Responsive navbar-->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="/">Toxic Comment Classifier</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <li class="nav-item"><a class="nav-link" href="https://github.com/aliasZadok" target="_blank">GitHub</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">README</a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="https://drive.google.com/file/d/1IwA_u40zAInNmLr7FD6kML5LID-3Q10g/preview" target="_blank">Report.pdf</a></li>
+                                <li><a class="dropdown-item" href="https://drive.google.com/file/d/1wnhdgfmspdiAjXcvA4qzWKPVdNHyt2ol/preview" target="_blank">Proposal.pdf</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- Page content-->
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6 mx-auto mt-5" style="width:50%;">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Write a comment:</h5>
+                    <form class="d-flex flex-column" action="{{ url_for('predict')}}" method="post">
+                      <textarea type="text" name="text" class="form-control" style="height: 200px;"></textarea>
+                      <p></p>
+                      <button type="submit" class="btn btn-success align-self-end">Predict</button>
+                    </form>
+                  </div>
+                </div>
+            </div>
+            {% if show_chart == True %}
+            <div class="hidden-content col-md-6 mx-auto mt-5" style="width:50%;">
+                <canvas id="myChart" style="height: 352px;"></canvas>
+                <script>
+                  var xValues = ["Toxic", "Severe Toxic", "Obscene", "Insult", "Threat", "Identity Hate"];
+                  var yValues = [{{pred_tox}}, {{pred_sev}}, {{pred_obs}}, {{pred_ins}}, {{pred_thr}}, {{pred_ide}}];
+
+                  new Chart("myChart", {
+                    type: "bar",
+                    data: {
+                      labels: xValues,
+                      datasets: [{
+                        label: "Probability Score (0 to 1)",
+                        backgroundColor: "#df2121",
+                        data: yValues
+                      }]
+                    },
+                    options: {
+                      responsive: true,
+                      maintainAspectRatio: false,
+                      title: {
+                        display: true,
+                        text: "Toxicity Prediction"
+                      }
+                    }
+                  });
+                </script>
+            </div>
+            {% else %}
+            <div></div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+    </body>
+</html>
