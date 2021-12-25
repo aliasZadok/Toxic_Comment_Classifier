@@ -1,1 +1,1 @@
-web: gunicorn -b :$PORT toxic_comment_classifier_app:app
+web: gunicorn toxic_comment_classifier_app:app
